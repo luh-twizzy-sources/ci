@@ -1,7 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import cheeseImages from "./data/cheeseImages.json";
 
-const API_BASE = "";
+const API_BASE = import.meta.env.VITE_API_BASE || "";
 const IMAGE_OVERRIDES_KEY = "cheese_image_overrides_v1";
 const FALLBACK_CHEESE_IMAGE =
   "data:image/svg+xml;utf8," +
@@ -897,4 +897,3 @@ function AdminPanel({ showAlert, imageOverrides, saveImageOverride }) {
 }
 
 export default App;
-
