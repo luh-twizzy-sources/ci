@@ -96,7 +96,7 @@ jobs:
         run: npm run build
 
   deploy:
-    name: Deploy to Render
+    name: Deploy to Railway
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -107,19 +107,68 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Trigger Render Deploy Hook
-        env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          RENDER_DEPLOY_HOOK_URL="$(printf '%s' "${RENDER_DEPLOY_HOOK_URL}" | tr -d '\r\n' | xargs)"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-          if [ -z "${RENDER_DEPLOY_HOOK_URL}" ]; then
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Validate Railway configuration
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ secrets.RAILWAY_ENVIRONMENT_NAME }}
+          RAILWAY_BACKEND_SERVICE: ${{ secrets.RAILWAY_BACKEND_SERVICE }}
+          RAILWAY_FRONTEND_SERVICE: ${{ secrets.RAILWAY_FRONTEND_SERVICE }}
+        run: |
+          RAILWAY_TOKEN="$(printf '%s' "${RAILWAY_TOKEN}" | tr -d '\r\n' | xargs)"
+          RAILWAY_PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID}" | tr -d '\r\n' | xargs)"
+          RAILWAY_ENVIRONMENT_NAME="$(printf '%s' "${RAILWAY_ENVIRONMENT_NAME}" | tr -d '\r\n' | xargs)"
+          RAILWAY_BACKEND_SERVICE="$(printf '%s' "${RAILWAY_BACKEND_SERVICE}" | tr -d '\r\n' | xargs)"
+          RAILWAY_FRONTEND_SERVICE="$(printf '%s' "${RAILWAY_FRONTEND_SERVICE}" | tr -d '\r\n' | xargs)"
+
+          if [ -z "${RAILWAY_TOKEN}" ] || [ -z "${RAILWAY_PROJECT_ID}" ] || [ -z "${RAILWAY_ENVIRONMENT_NAME}" ] || [ -z "${RAILWAY_BACKEND_SERVICE}" ] || [ -z "${RAILWAY_FRONTEND_SERVICE}" ]; then
             echo "Missing required GitHub config."
-            echo "Required: secret RENDER_DEPLOY_HOOK_URL"
+            echo "Required:"
+            echo "- secret RAILWAY_TOKEN"
+            echo "- secret RAILWAY_PROJECT_ID"
+            echo "- variable RAILWAY_ENVIRONMENT_NAME"
+            echo "- variable RAILWAY_BACKEND_SERVICE"
+            echo "- variable RAILWAY_FRONTEND_SERVICE"
             exit 1
           fi
 
-          curl -fsS -X POST "${RENDER_DEPLOY_HOOK_URL}"
+      - name: Deploy backend to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ secrets.RAILWAY_ENVIRONMENT_NAME }}
+          RAILWAY_BACKEND_SERVICE: ${{ secrets.RAILWAY_BACKEND_SERVICE }}
+        run: |
+          railway up \
+            --ci \
+            --service "${RAILWAY_BACKEND_SERVICE}" \
+            --project "${RAILWAY_PROJECT_ID}" \
+            --environment "${RAILWAY_ENVIRONMENT_NAME}" \
+            --path . \
+            --path-as-root
+
+      - name: Deploy frontend to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_ENVIRONMENT_NAME: ${{ secrets.RAILWAY_ENVIRONMENT_NAME }}
+          RAILWAY_FRONTEND_SERVICE: ${{ secrets.RAILWAY_FRONTEND_SERVICE }}
+        run: |
+          railway up \
+            --ci \
+            --service "${RAILWAY_FRONTEND_SERVICE}" \
+            --project "${RAILWAY_PROJECT_ID}" \
+            --environment "${RAILWAY_ENVIRONMENT_NAME}" \
+            --path frontend \
+            --path-as-root
 
   healthcheck:
     name: Post-deploy Healthcheck
@@ -130,7 +179,7 @@ jobs:
     steps:
       - name: Check deployed app health
         env:
-          APP_HEALTHCHECK_URL: ${{ vars.APP_HEALTHCHECK_URL }}
+          APP_HEALTHCHECK_URL: ${{ secrets.APP_HEALTHCHECK_URL }}
         run: |
           APP_HEALTHCHECK_URL="$(printf '%s' "${APP_HEALTHCHECK_URL}" | tr -d '\r\n' | xargs)"
 
