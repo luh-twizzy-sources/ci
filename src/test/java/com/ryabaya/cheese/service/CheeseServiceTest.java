@@ -85,7 +85,7 @@ class CheeseServiceTest {
     void setUp() {
         shop = new Shop();
         shop.setId(1L);
-        shop.setName("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
+        shop.setName("Сырная лавка");
         shop.setCheeses(new ArrayList<>());
 
         producer = new Producer();
@@ -95,9 +95,9 @@ class CheeseServiceTest {
 
         cheese = new Cheese();
         cheese.setId(1L);
-        cheese.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheese.setName("Пармезан");
         cheese.setFats(32.5);
-        cheese.setDescription("Ð˜Ñ‚Ð°Ð»ÑŒÑÐ½ÑÐºÐ¸Ð¹ Ñ‚Ð²ÐµÑ€Ð´Ñ‹Ð¹ ÑÑ‹Ñ€");
+        cheese.setDescription("Итальянский твердый сыр");
         cheese.setPrice(1250.50);
         cheese.setShop(shop);
         cheese.setProducer(producer);
@@ -105,28 +105,28 @@ class CheeseServiceTest {
         cheese.setReviews(new ArrayList<>());
 
         cheeseRequestDto = new CheeseRequestDto();
-        cheeseRequestDto.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheeseRequestDto.setName("Пармезан");
         cheeseRequestDto.setFats(32.5);
-        cheeseRequestDto.setDescription("Ð˜Ñ‚Ð°Ð»ÑŒÑÐ½ÑÐºÐ¸Ð¹ Ñ‚Ð²ÐµÑ€Ð´Ñ‹Ð¹ ÑÑ‹Ñ€");
+        cheeseRequestDto.setDescription("Итальянский твердый сыр");
         cheeseRequestDto.setPrice(1250.50);
 
         cheeseResponseDto = new CheeseResponseDto();
         cheeseResponseDto.setId(1L);
-        cheeseResponseDto.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheeseResponseDto.setName("Пармезан");
         cheeseResponseDto.setFats(32.5);
-        cheeseResponseDto.setDescription("Ð˜Ñ‚Ð°Ð»ÑŒÑÐ½ÑÐºÐ¸Ð¹ Ñ‚Ð²ÐµÑ€Ð´Ñ‹Ð¹ ÑÑ‹Ñ€");
+        cheeseResponseDto.setDescription("Итальянский твердый сыр");
         cheeseResponseDto.setPrice(1250.50);
 
         cheeseCreationRequestDto = new CheeseCreationRequestDto();
-        cheeseCreationRequestDto.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheeseCreationRequestDto.setName("Пармезан");
         cheeseCreationRequestDto.setFats(32.5);
-        cheeseCreationRequestDto.setDescription("Ð˜Ñ‚Ð°Ð»ÑŒÑÐ½ÑÐºÐ¸Ð¹ Ñ‚Ð²ÐµÑ€Ð´Ñ‹Ð¹ ÑÑ‹Ñ€");
+        cheeseCreationRequestDto.setDescription("Итальянский твердый сыр");
         cheeseCreationRequestDto.setPrice(1250.50);
-        cheeseCreationRequestDto.setCategoryName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
-        cheeseCreationRequestDto.setCategoryDescription("ÐžÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸");
-        cheeseCreationRequestDto.setReviewAuthor("Ð˜Ð²Ð°Ð½");
+        cheeseCreationRequestDto.setCategoryName("Твердые сыры");
+        cheeseCreationRequestDto.setCategoryDescription("Описание категории");
+        cheeseCreationRequestDto.setReviewAuthor("Иван");
         cheeseCreationRequestDto.setReviewRating(5);
-        cheeseCreationRequestDto.setReviewComment("ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ ÑÑ‹Ñ€");
+        cheeseCreationRequestDto.setReviewComment("Отличный сыр!");
         cheeseCreationRequestDto.setInitiatedProblem(false);
 
         List<CheeseRequestDto> requests = new ArrayList<>();
@@ -205,24 +205,24 @@ class CheeseServiceTest {
 
     @Test
     void getCheeseByName_ShouldReturnCheeseResponseDto_WhenCheeseExists() {
-        when(cheeseRepository.findByName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½")).thenReturn(Optional.of(cheese));
+        when(cheeseRepository.findByName("Пармезан")).thenReturn(Optional.of(cheese));
         when(cheeseMapper.toResponseDto(cheese)).thenReturn(cheeseResponseDto);
 
-        CheeseResponseDto result = cheeseService.getCheeseByName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        CheeseResponseDto result = cheeseService.getCheeseByName("Пармезан");
 
         assertThat(result).isNotNull();
-        verify(cheeseRepository).findByName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        verify(cheeseRepository).findByName("Пармезан");
     }
 
     @Test
     void getCheeseByName_ShouldThrowException_WhenCheeseNotFound() {
-        when(cheeseRepository.findByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹")).thenReturn(Optional.empty());
+        when(cheeseRepository.findByName("Несуществующий")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> cheeseService.getCheeseByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹"))
+        assertThatThrownBy(() -> cheeseService.getCheeseByName("Несуществующий"))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Cheese not found with name: ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹");
+                .hasMessageContaining("Cheese not found with name: Несуществующий");
 
-        verify(cheeseRepository).findByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹");
+        verify(cheeseRepository).findByName("Несуществующий");
     }
 
     @Test
@@ -383,10 +383,10 @@ class CheeseServiceTest {
                 .thenReturn(cheeses);
         when(cheeseMapper.toResponseDto(cheese)).thenReturn(cheeseResponseDto);
 
-        List<CheeseResponseDto> result = cheeseService.searchCheesesJpql("Ð˜Ñ‚Ð°Ð»Ð¸Ñ", "Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ", 35.0);
+        List<CheeseResponseDto> result = cheeseService.searchCheesesJpql("Италия", "Твердые", 35.0);
 
         assertThat(result).hasSize(1);
-        verify(cheeseRepository).findCheesesByCriteria("Ð˜Ñ‚Ð°Ð»Ð¸Ñ", "Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ", 35.0);
+        verify(cheeseRepository).findCheesesByCriteria("Италия", "Твердые", 35.0);
     }
 
     @Test
@@ -394,10 +394,10 @@ class CheeseServiceTest {
         when(cheeseRepository.findCheesesByCriteria(anyString(), anyString(), anyDouble()))
                 .thenReturn(List.of());
 
-        List<CheeseResponseDto> result = cheeseService.searchCheesesJpql("Ð¤Ñ€Ð°Ð½Ñ†Ð¸Ñ", "ÐœÑÐ³ÐºÐ¸Ðµ", 30.0);
+        List<CheeseResponseDto> result = cheeseService.searchCheesesJpql("Франция", "Мягкие", 30.0);
 
         assertThat(result).isEmpty();
-        verify(cheeseRepository).findCheesesByCriteria("Ð¤Ñ€Ð°Ð½Ñ†Ð¸Ñ", "ÐœÑÐ³ÐºÐ¸Ðµ", 30.0);
+        verify(cheeseRepository).findCheesesByCriteria("Франция", "Мягкие", 30.0);
     }
 
     @Test
@@ -407,10 +407,10 @@ class CheeseServiceTest {
                 .thenReturn(cheeses);
         when(cheeseMapper.toResponseDto(cheese)).thenReturn(cheeseResponseDto);
 
-        List<CheeseResponseDto> result = cheeseService.searchCheesesNative("Ð˜Ñ‚Ð°Ð»Ð¸Ñ", "Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ", 35.0);
+        List<CheeseResponseDto> result = cheeseService.searchCheesesNative("Италия", "Твердые", 35.0);
 
         assertThat(result).hasSize(1);
-        verify(cheeseRepository).findCheesesByCriteriaNative("Ð˜Ñ‚Ð°Ð»Ð¸Ñ", "Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ", 35.0);
+        verify(cheeseRepository).findCheesesByCriteriaNative("Италия", "Твердые", 35.0);
     }
 
     @Test
@@ -418,10 +418,10 @@ class CheeseServiceTest {
         when(cheeseRepository.findCheesesByCriteriaNative(anyString(), anyString(), anyDouble()))
                 .thenReturn(List.of());
 
-        List<CheeseResponseDto> result = cheeseService.searchCheesesNative("Ð¤Ñ€Ð°Ð½Ñ†Ð¸Ñ", "ÐœÑÐ³ÐºÐ¸Ðµ", 30.0);
+        List<CheeseResponseDto> result = cheeseService.searchCheesesNative("Франция", "Мягкие", 30.0);
 
         assertThat(result).isEmpty();
-        verify(cheeseRepository).findCheesesByCriteriaNative("Ð¤Ñ€Ð°Ð½Ñ†Ð¸Ñ", "ÐœÑÐ³ÐºÐ¸Ðµ", 30.0);
+        verify(cheeseRepository).findCheesesByCriteriaNative("Франция", "Мягкие", 30.0);
     }
 
     @Test
@@ -458,7 +458,7 @@ class CheeseServiceTest {
 
         assertThatThrownBy(() -> cheeseService.bulkCreateCheesesWithTx(99L, 1L, cheeseBulkRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("ÐœÐ°Ð³Ð°Ð·Ð¸Ð½ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½ Ñ id: 99");
+                .hasMessageContaining("Магазин не найден с id: 99");
 
         verify(cheeseRepository, never()).save(any(Cheese.class));
     }
@@ -470,7 +470,7 @@ class CheeseServiceTest {
 
         assertThatThrownBy(() -> cheeseService.bulkCreateCheesesWoTx(1L, 99L, cheeseBulkRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("ÐŸÑ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½ Ñ id: 99");
+                .hasMessageContaining("Производитель не найден с id: 99");
 
         verify(cheeseRepository, never()).save(any(Cheese.class));
     }

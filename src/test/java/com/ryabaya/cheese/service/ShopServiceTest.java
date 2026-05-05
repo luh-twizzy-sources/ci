@@ -49,19 +49,19 @@ class ShopServiceTest {
     void setUp() {
         shop = new Shop();
         shop.setId(1L);
-        shop.setName("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
-        shop.setAddress("ÑƒÐ». ÐŸÑƒÑˆÐºÐ¸Ð½Ð°, Ð´. 10");
+        shop.setName("Сырная лавка");
+        shop.setAddress("ул. Пушкина, д. 10");
         shop.setPhone("+7 (495) 123-45-67");
 
         shopRequestDto = new ShopRequestDto();
-        shopRequestDto.setName("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
-        shopRequestDto.setAddress("ÑƒÐ». ÐŸÑƒÑˆÐºÐ¸Ð½Ð°, Ð´. 10");
+        shopRequestDto.setName("Сырная лавка");
+        shopRequestDto.setAddress("ул. Пушкина, д. 10");
         shopRequestDto.setPhone("+7 (495) 123-45-67");
 
         shopResponseDto = new ShopResponseDto();
         shopResponseDto.setId(1L);
-        shopResponseDto.setName("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
-        shopResponseDto.setAddress("ÑƒÐ». ÐŸÑƒÑˆÐºÐ¸Ð½Ð°, Ð´. 10");
+        shopResponseDto.setName("Сырная лавка");
+        shopResponseDto.setAddress("ул. Пушкина, д. 10");
         shopResponseDto.setPhone("+7 (495) 123-45-67");
     }
 
@@ -75,7 +75,7 @@ class ShopServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getName()).isEqualTo("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
+        assertThat(result.getName()).isEqualTo("Сырная лавка");
         verify(shopRepository).save(any(Shop.class));
     }
 
@@ -121,7 +121,7 @@ class ShopServiceTest {
     void updateShop_ShouldReturnUpdatedShopResponseDto_WhenShopExists() {
         Shop existingShop = new Shop();
         existingShop.setId(1L);
-        existingShop.setName("Ð¡Ñ‚Ð°Ñ€Ñ‹Ð¹ Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½");
+        existingShop.setName("Старый магазин");
 
         when(shopRepository.findById(1L)).thenReturn(Optional.of(existingShop));
         doAnswer(invocation -> {
@@ -136,7 +136,7 @@ class ShopServiceTest {
         ShopResponseDto result = shopService.updateShop(1L, shopRequestDto);
 
         assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("Ð¡Ñ‹Ñ€Ð½Ð°Ñ Ð»Ð°Ð²ÐºÐ°");
+        assertThat(result.getName()).isEqualTo("Сырная лавка");
         verify(shopRepository).findById(1L);
         verify(shopMapper).updateEntityFromDto(existingShop, shopRequestDto);
         verify(shopRepository).save(existingShop);

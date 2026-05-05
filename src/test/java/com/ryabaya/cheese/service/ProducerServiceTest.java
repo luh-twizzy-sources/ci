@@ -53,19 +53,19 @@ class ProducerServiceTest {
         producer = new Producer();
         producer.setId(1L);
         producer.setName("Parmigiano Reggiano");
-        producer.setCountry("Ð˜Ñ‚Ð°Ð»Ð¸Ñ");
-        producer.setDescription("Ð˜Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ");
+        producer.setCountry("Италия");
+        producer.setDescription("Известный производитель");
 
         producerRequestDto = new ProducerRequestDto();
         producerRequestDto.setName("Parmigiano Reggiano");
-        producerRequestDto.setCountry("Ð˜Ñ‚Ð°Ð»Ð¸Ñ");
-        producerRequestDto.setDescription("Ð˜Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ");
+        producerRequestDto.setCountry("Италия");
+        producerRequestDto.setDescription("Известный производитель");
 
         producerResponseDto = new ProducerResponseDto();
         producerResponseDto.setId(1L);
         producerResponseDto.setName("Parmigiano Reggiano");
-        producerResponseDto.setCountry("Ð˜Ñ‚Ð°Ð»Ð¸Ñ");
-        producerResponseDto.setDescription("Ð˜Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ");
+        producerResponseDto.setCountry("Италия");
+        producerResponseDto.setDescription("Известный производитель");
     }
 
     @Test
@@ -143,7 +143,7 @@ class ProducerServiceTest {
     void updateProducer_ShouldReturnUpdatedProducerResponseDto_WhenProducerExists() {
         Producer existingProducer = new Producer();
         existingProducer.setId(1L);
-        existingProducer.setName("Ð¡Ñ‚Ð°Ñ€Ñ‹Ð¹ Ð¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ");
+        existingProducer.setName("Старый производитель");
 
         when(producerRepository.findById(1L)).thenReturn(Optional.of(existingProducer));
         doAnswer(invocation -> {

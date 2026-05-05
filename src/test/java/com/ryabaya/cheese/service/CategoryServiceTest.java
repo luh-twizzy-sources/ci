@@ -53,23 +53,23 @@ class CategoryServiceTest {
     void setUp() {
         cheese = new Cheese();
         cheese.setId(1L);
-        cheese.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheese.setName("Пармезан");
         cheese.setCategories(new HashSet<>());
 
         category = new Category();
         category.setId(1L);
-        category.setName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
-        category.setDescription("Ð¡Ñ‹Ñ€Ñ‹ Ñ Ð½Ð¸Ð·ÐºÐ¸Ð¼ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸ÐµÐ¼ Ð²Ð»Ð°Ð³Ð¸");
+        category.setName("Твердые сыры");
+        category.setDescription("Сыры с низким содержанием влаги");
         category.setCheeses(new HashSet<>());
 
         categoryRequestDto = new CategoryRequestDto();
-        categoryRequestDto.setName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
-        categoryRequestDto.setDescription("Ð¡Ñ‹Ñ€Ñ‹ Ñ Ð½Ð¸Ð·ÐºÐ¸Ð¼ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸ÐµÐ¼ Ð²Ð»Ð°Ð³Ð¸");
+        categoryRequestDto.setName("Твердые сыры");
+        categoryRequestDto.setDescription("Сыры с низким содержанием влаги");
 
         categoryResponseDto = new CategoryResponseDto();
         categoryResponseDto.setId(1L);
-        categoryResponseDto.setName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
-        categoryResponseDto.setDescription("Ð¡Ñ‹Ñ€Ñ‹ Ñ Ð½Ð¸Ð·ÐºÐ¸Ð¼ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸ÐµÐ¼ Ð²Ð»Ð°Ð³Ð¸");
+        categoryResponseDto.setName("Твердые сыры");
+        categoryResponseDto.setDescription("Сыры с низким содержанием влаги");
     }
 
     @Test
@@ -83,7 +83,7 @@ class CategoryServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getName()).isEqualTo("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
+        assertThat(result.getName()).isEqualTo("Твердые сыры");
         verify(cheeseRepository).findById(1L);
         verify(categoryRepository).save(any(Category.class));
         assertThat(cheese.getCategories()).contains(category);
@@ -127,25 +127,25 @@ class CategoryServiceTest {
 
     @Test
     void getCategoryByName_ShouldReturnCategoryResponseDto_WhenCategoryExists() {
-        when(categoryRepository.findByName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹")).thenReturn(Optional.of(category));
+        when(categoryRepository.findByName("Твердые сыры")).thenReturn(Optional.of(category));
         when(categoryMapper.toResponseDto(category)).thenReturn(categoryResponseDto);
 
-        CategoryResponseDto result = categoryService.getCategoryByName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
+        CategoryResponseDto result = categoryService.getCategoryByName("Твердые сыры");
 
         assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
-        verify(categoryRepository).findByName("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
+        assertThat(result.getName()).isEqualTo("Твердые сыры");
+        verify(categoryRepository).findByName("Твердые сыры");
     }
 
     @Test
     void getCategoryByName_ShouldThrowException_WhenCategoryNotFound() {
-        when(categoryRepository.findByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð°Ñ")).thenReturn(Optional.empty());
+        when(categoryRepository.findByName("Несуществующая")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> categoryService.getCategoryByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð°Ñ"))
+        assertThatThrownBy(() -> categoryService.getCategoryByName("Несуществующая"))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Category not found with id : ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð°Ñ");
+                .hasMessageContaining("Category not found with id : Несуществующая");
 
-        verify(categoryRepository).findByName("ÐÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð°Ñ");
+        verify(categoryRepository).findByName("Несуществующая");
     }
 
     @Test
@@ -164,7 +164,7 @@ class CategoryServiceTest {
     void updateCategory_ShouldReturnUpdatedCategoryResponseDto_WhenCategoryExists() {
         Category existingCategory = new Category();
         existingCategory.setId(1L);
-        existingCategory.setName("Ð¡Ñ‚Ð°Ñ€Ð°Ñ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ñ");
+        existingCategory.setName("Старая категория");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existingCategory));
         doAnswer(invocation -> {
@@ -178,7 +178,7 @@ class CategoryServiceTest {
         CategoryResponseDto result = categoryService.updateCategory(1L, categoryRequestDto);
 
         assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("Ð¢Ð²ÐµÑ€Ð´Ñ‹Ðµ ÑÑ‹Ñ€Ñ‹");
+        assertThat(result.getName()).isEqualTo("Твердые сыры");
         verify(categoryRepository).findById(1L);
         verify(categoryMapper).updateEntityFromDto(existingCategory, categoryRequestDto);
         verify(categoryRepository).save(existingCategory);

@@ -52,26 +52,26 @@ class ReviewServiceTest {
     void setUp() {
         cheese = new Cheese();
         cheese.setId(1L);
-        cheese.setName("ÐŸÐ°Ñ€Ð¼ÐµÐ·Ð°Ð½");
+        cheese.setName("Пармезан");
         cheese.setReviews(new ArrayList<>());
 
         review = new Review();
         review.setId(1L);
-        review.setAuthor("Ð˜Ð²Ð°Ð½ ÐŸÐµÑ‚Ñ€Ð¾Ð²");
+        review.setAuthor("Иван Петров");
         review.setRating(5);
-        review.setComment("ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ ÑÑ‹Ñ€!");
+        review.setComment("Отличный сыр!");
         review.setCheese(cheese);
 
         reviewRequestDto = new ReviewRequestDto();
-        reviewRequestDto.setAuthor("Ð˜Ð²Ð°Ð½ ÐŸÐµÑ‚Ñ€Ð¾Ð²");
+        reviewRequestDto.setAuthor("Иван Петров");
         reviewRequestDto.setRating(5);
-        reviewRequestDto.setComment("ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ ÑÑ‹Ñ€!");
+        reviewRequestDto.setComment("Отличный сыр!");
 
         reviewResponseDto = new ReviewResponseDto();
         reviewResponseDto.setId(1L);
-        reviewResponseDto.setAuthor("Ð˜Ð²Ð°Ð½ ÐŸÐµÑ‚Ñ€Ð¾Ð²");
+        reviewResponseDto.setAuthor("Иван Петров");
         reviewResponseDto.setRating(5);
-        reviewResponseDto.setComment("ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ñ‹Ð¹ ÑÑ‹Ñ€!");
+        reviewResponseDto.setComment("Отличный сыр!");
     }
 
     @Test
@@ -85,7 +85,7 @@ class ReviewServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getAuthor()).isEqualTo("Ð˜Ð²Ð°Ð½ ÐŸÐµÑ‚Ñ€Ð¾Ð²");
+        assertThat(result.getAuthor()).isEqualTo("Иван Петров");
         verify(cheeseRepository).findById(1L);
         verify(reviewRepository).save(any(Review.class));
         assertThat(cheese.getReviews()).contains(review);
@@ -142,7 +142,7 @@ class ReviewServiceTest {
     void updateReview_ShouldReturnUpdatedReviewResponseDto_WhenReviewExists() {
         Review existingReview = new Review();
         existingReview.setId(1L);
-        existingReview.setAuthor("Ð¡Ñ‚Ð°Ñ€Ñ‹Ð¹ Ð°Ð²Ñ‚Ð¾Ñ€");
+        existingReview.setAuthor("Старый автор");
         existingReview.setRating(3);
 
         when(reviewRepository.findById(1L)).thenReturn(Optional.of(existingReview));
@@ -158,7 +158,7 @@ class ReviewServiceTest {
         ReviewResponseDto result = reviewService.updateReview(1L, reviewRequestDto);
 
         assertThat(result).isNotNull();
-        assertThat(result.getAuthor()).isEqualTo("Ð˜Ð²Ð°Ð½ ÐŸÐµÑ‚Ñ€Ð¾Ð²");
+        assertThat(result.getAuthor()).isEqualTo("Иван Петров");
         assertThat(result.getRating()).isEqualTo(5);
         verify(reviewRepository).findById(1L);
         verify(reviewMapper).updateEntityFromDto(existingReview, reviewRequestDto);
